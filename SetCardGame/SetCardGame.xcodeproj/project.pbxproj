@@ -8,18 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		51AF40FA2C4811CB00064D99 /* SetCardGameApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF40F92C4811CB00064D99 /* SetCardGameApp.swift */; };
-		51AF40FC2C4811CB00064D99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF40FB2C4811CB00064D99 /* ContentView.swift */; };
+		51AF40FC2C4811CB00064D99 /* SetCardGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF40FB2C4811CB00064D99 /* SetCardGameView.swift */; };
 		51AF40FE2C4811CC00064D99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51AF40FD2C4811CC00064D99 /* Assets.xcassets */; };
 		51AF41022C4811CC00064D99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51AF41012C4811CC00064D99 /* Preview Assets.xcassets */; };
+		51AF41092C4812AC00064D99 /* AspectLazyVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41082C4812AC00064D99 /* AspectLazyVGrid.swift */; };
+		51AF410B2C4815A400064D99 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410A2C4815A400064D99 /* Cardify.swift */; };
+		51AF410D2C4817CB00064D99 /* SetGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410C2C4817CB00064D99 /* SetGameModel.swift */; };
+		51AF410F2C481B7D00064D99 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410E2C481B7D00064D99 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		51AF40F62C4811CB00064D99 /* SetCardGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SetCardGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51AF40F92C4811CB00064D99 /* SetCardGameApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardGameApp.swift; sourceTree = "<group>"; };
-		51AF40FB2C4811CB00064D99 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		51AF40FB2C4811CB00064D99 /* SetCardGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardGameView.swift; sourceTree = "<group>"; };
 		51AF40FD2C4811CC00064D99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51AF40FF2C4811CC00064D99 /* SetCardGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SetCardGame.entitlements; sourceTree = "<group>"; };
 		51AF41012C4811CC00064D99 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		51AF41082C4812AC00064D99 /* AspectLazyVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectLazyVGrid.swift; sourceTree = "<group>"; };
+		51AF410A2C4815A400064D99 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
+		51AF410C2C4817CB00064D99 /* SetGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameModel.swift; sourceTree = "<group>"; };
+		51AF410E2C481B7D00064D99 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,10 +61,14 @@
 			isa = PBXGroup;
 			children = (
 				51AF40F92C4811CB00064D99 /* SetCardGameApp.swift */,
-				51AF40FB2C4811CB00064D99 /* ContentView.swift */,
+				51AF40FB2C4811CB00064D99 /* SetCardGameView.swift */,
 				51AF40FD2C4811CC00064D99 /* Assets.xcassets */,
 				51AF40FF2C4811CC00064D99 /* SetCardGame.entitlements */,
 				51AF41002C4811CC00064D99 /* Preview Content */,
+				51AF41082C4812AC00064D99 /* AspectLazyVGrid.swift */,
+				51AF410A2C4815A400064D99 /* Cardify.swift */,
+				51AF410C2C4817CB00064D99 /* SetGameModel.swift */,
+				51AF410E2C481B7D00064D99 /* CardView.swift */,
 			);
 			path = SetCardGame;
 			sourceTree = "<group>";
@@ -139,8 +151,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51AF40FC2C4811CB00064D99 /* ContentView.swift in Sources */,
+				51AF40FC2C4811CB00064D99 /* SetCardGameView.swift in Sources */,
 				51AF40FA2C4811CB00064D99 /* SetCardGameApp.swift in Sources */,
+				51AF410B2C4815A400064D99 /* Cardify.swift in Sources */,
+				51AF41092C4812AC00064D99 /* AspectLazyVGrid.swift in Sources */,
+				51AF410F2C481B7D00064D99 /* CardView.swift in Sources */,
+				51AF410D2C4817CB00064D99 /* SetGameModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +286,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SetCardGame/Preview Content\"";
-				DEVELOPMENT_TEAM = UDR7F9XR42;
+				DEVELOPMENT_TEAM = KWK8QZE47A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -308,7 +324,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SetCardGame/Preview Content\"";
-				DEVELOPMENT_TEAM = UDR7F9XR42;
+				DEVELOPMENT_TEAM = KWK8QZE47A;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
