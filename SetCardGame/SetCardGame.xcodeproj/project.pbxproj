@@ -15,6 +15,11 @@
 		51AF410B2C4815A400064D99 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410A2C4815A400064D99 /* Cardify.swift */; };
 		51AF410D2C4817CB00064D99 /* SetGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410C2C4817CB00064D99 /* SetGameModel.swift */; };
 		51AF410F2C481B7D00064D99 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF410E2C481B7D00064D99 /* CardView.swift */; };
+		51AF41112C48283400064D99 /* SetCardGameInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41102C48283400064D99 /* SetCardGameInterpreter.swift */; };
+		51AF41142C48351D00064D99 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 51AF41132C48351D00064D99 /* Algorithms */; };
+		51AF41162C48376200064D99 /* ProductCollection4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41152C48376200064D99 /* ProductCollection4.swift */; };
+		51AF41182C4837F800064D99 /* SetFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41172C4837F800064D99 /* SetFeatures.swift */; };
+		51AF411A2C48424100064D99 /* GrowingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41192C48424100064D99 /* GrowingButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +33,10 @@
 		51AF410A2C4815A400064D99 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		51AF410C2C4817CB00064D99 /* SetGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameModel.swift; sourceTree = "<group>"; };
 		51AF410E2C481B7D00064D99 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		51AF41102C48283400064D99 /* SetCardGameInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardGameInterpreter.swift; sourceTree = "<group>"; };
+		51AF41152C48376200064D99 /* ProductCollection4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCollection4.swift; sourceTree = "<group>"; };
+		51AF41172C4837F800064D99 /* SetFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFeatures.swift; sourceTree = "<group>"; };
+		51AF41192C48424100064D99 /* GrowingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51AF41142C48351D00064D99 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +79,10 @@
 				51AF410A2C4815A400064D99 /* Cardify.swift */,
 				51AF410C2C4817CB00064D99 /* SetGameModel.swift */,
 				51AF410E2C481B7D00064D99 /* CardView.swift */,
+				51AF41102C48283400064D99 /* SetCardGameInterpreter.swift */,
+				51AF41152C48376200064D99 /* ProductCollection4.swift */,
+				51AF41172C4837F800064D99 /* SetFeatures.swift */,
+				51AF41192C48424100064D99 /* GrowingButton.swift */,
 			);
 			path = SetCardGame;
 			sourceTree = "<group>";
@@ -97,6 +111,9 @@
 			dependencies = (
 			);
 			name = SetCardGame;
+			packageProductDependencies = (
+				51AF41132C48351D00064D99 /* Algorithms */,
+			);
 			productName = SetCardGame;
 			productReference = 51AF40F62C4811CB00064D99 /* SetCardGame.app */;
 			productType = "com.apple.product-type.application";
@@ -125,6 +142,9 @@
 				Base,
 			);
 			mainGroup = 51AF40ED2C4811CB00064D99;
+			packageReferences = (
+				51AF41122C48351D00064D99 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			productRefGroup = 51AF40F72C4811CB00064D99 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -153,10 +173,14 @@
 			files = (
 				51AF40FC2C4811CB00064D99 /* SetCardGameView.swift in Sources */,
 				51AF40FA2C4811CB00064D99 /* SetCardGameApp.swift in Sources */,
+				51AF41112C48283400064D99 /* SetCardGameInterpreter.swift in Sources */,
 				51AF410B2C4815A400064D99 /* Cardify.swift in Sources */,
+				51AF41162C48376200064D99 /* ProductCollection4.swift in Sources */,
+				51AF41182C4837F800064D99 /* SetFeatures.swift in Sources */,
 				51AF41092C4812AC00064D99 /* AspectLazyVGrid.swift in Sources */,
 				51AF410F2C481B7D00064D99 /* CardView.swift in Sources */,
 				51AF410D2C4817CB00064D99 /* SetGameModel.swift in Sources */,
+				51AF411A2C48424100064D99 /* GrowingButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +399,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		51AF41122C48351D00064D99 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		51AF41132C48351D00064D99 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51AF41122C48351D00064D99 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 51AF40EE2C4811CB00064D99 /* Project object */;
 }

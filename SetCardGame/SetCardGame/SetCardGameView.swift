@@ -8,36 +8,33 @@
 import SwiftUI
 
 struct SetCardGameView: View {
-    let cards = [
-        SetGameModel.Card(
-            chosen: false, numberOfShapes: 2, shape: .diamond, shading: .striped, color: "red", id: "1"
-        ),
-        SetGameModel.Card(
-            chosen: false, numberOfShapes: 3, shape: .squiggle, shading: .open, color: "blue", id: "2"
-        ),
-        SetGameModel.Card(
-            chosen: false, numberOfShapes: 1, shape: .oval, shading: .solid, color: "green", id: "3"
-        ),
-        SetGameModel.Card(
-            chosen: false, numberOfShapes: 2, shape: .diamond, shading: .open, color: "red", id: "4"
-        )
-    ]
+    @ObservedObject var viewModel: SetCardGameInterpreter
+
     var body: some View {
         VStack(spacing: 0) {
             cardsGrid
-                .foregroundColor(.blue)                
+                .foregroundColor(.blue)
+            Button(
+                action: {
+                    viewModel.openNextCards()
+                }) {
+                    Text("Open 3 Cards")
+                        .fontWeight(.medium)
+                }
+                .buttonStyle(
+                    GrowingButton(color: .indigo)
+                )
         }
         .padding()
     }
 
     private var cardsGrid: some View {
-        AspectLazyVGrid(cards) { card in
+        AspectLazyVGrid(viewModel.cards) { card in
             let color: Color = switch card.color {
-            case "red": .red
-            case "blue": .blue
-            case "green": .green
-            default: .red
-            }            
+            case .red: .red
+            case .blue: .blue
+            case .green: .green
+            }
             Circle()
                 .opacity(0.4)
                 .overlay {
@@ -57,5 +54,5 @@ struct SetCardGameView: View {
 }
 
 #Preview {
-    SetCardGameView()
+    SetCardGameView(viewModel: SetCardGameInterpreter())
 }
