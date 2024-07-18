@@ -8,15 +8,28 @@
 import SwiftUI
 
 struct GrowingButton: ButtonStyle {
+    let isEnabled: Bool
     let color: Color
+    let disabledColor: Color = .gray
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()
-            .background(color)
+            .background(isEnabled ? color : disabledColor)
             .foregroundStyle(.white)
             .clipShape(Capsule())
-            .scaleEffect(configuration.isPressed ? 1.2 : 1)
-            .animation(.easeOut(duration: 0.5), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? Constants.scaleWhenPressed : 1)
+            .animation(.easeOut(duration: Constants.animationDuration), value: configuration.isPressed)
+    }
+    
+    private struct Constants {
+        static let scaleWhenPressed: CGFloat = 1.2
+        static let animationDuration: CGFloat = 0.5
+    }
+}
+
+extension Text {
+    func coloredText(_ color: Color) -> Text {
+        foregroundColor(color)
     }
 }

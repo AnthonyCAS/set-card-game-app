@@ -26,7 +26,7 @@ struct SetGameModel {
                 color: $1,
                 id: "\($0)-\($1)-\($2)-\($3)"
             )
-        }
+        }.shuffled()
         openCards()
     }
 

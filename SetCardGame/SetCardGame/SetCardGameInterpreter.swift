@@ -21,6 +21,10 @@ class SetCardGameInterpreter: ObservableObject {
         }
     }
     
+    var canOpenMoreCards: Bool {
+        model.cards.filter { !$0.isOpened }.count > 0 && cards.count < 21
+    }
+    
     // MARK: - Intents
     
     func openNextCards(_ numberOfCards: Int = nextNumberOfCards) {
@@ -31,5 +35,9 @@ class SetCardGameInterpreter: ObservableObject {
     
     func choose(_ card: Card) {
         model.choose(card)
+    }
+    
+    func startNewGame() {
+        model = SetGameModel()
     }
 }
