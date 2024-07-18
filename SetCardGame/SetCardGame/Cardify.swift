@@ -9,21 +9,23 @@ import SwiftUI
 
 struct Cardify: ViewModifier {
     let isSelected: Bool
-    
+
     func body(content: Content) -> some View {
-        ZStack {
+        GeometryReader { _ in
             let base = RoundedRectangle(cornerRadius: Constants.cornerRadius)
-            base
+            return base
                 .strokeBorder(lineWidth: Constants.lineWidth)
                 .background(
                     base
                         .fill(isSelected ? .yellow : .white)
                         .opacity(Constants.opacity)
                 )
-                .overlay(content)                
+                .overlay(
+                    content
+                )
         }
     }
-    
+
     struct Constants {
         static let cornerRadius: CGFloat = 12
         static let lineWidth: CGFloat = 2

@@ -15,13 +15,13 @@ struct SetCardGameView: View {
     private let headerHeight: CGFloat = 88
     private let newGameIconSize: CGFloat = 24.0
 
-    var body: some View {
+    var body: some View {        
         VStack(spacing: 0) {
             header
             cardsGrid
                 .foregroundColor(.blue)
                 .animation(.default, value: viewModel.cards)
-            footer
+            footer            
         }
         .padding()
     }

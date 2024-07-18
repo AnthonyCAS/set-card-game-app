@@ -21,6 +21,8 @@
 		51AF41182C4837F800064D99 /* SetFeatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41172C4837F800064D99 /* SetFeatures.swift */; };
 		51AF411A2C48424100064D99 /* GrowingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF41192C48424100064D99 /* GrowingButton.swift */; };
 		51AF411C2C48D6D100064D99 /* SetGameScoreTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF411B2C48D6D100064D99 /* SetGameScoreTracker.swift */; };
+		51AF411E2C48E2D400064D99 /* Stripe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF411D2C48E2D400064D99 /* Stripe.swift */; };
+		51AF41202C48E83700064D99 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AF411F2C48E83700064D99 /* Diamond.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		51AF41172C4837F800064D99 /* SetFeatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetFeatures.swift; sourceTree = "<group>"; };
 		51AF41192C48424100064D99 /* GrowingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowingButton.swift; sourceTree = "<group>"; };
 		51AF411B2C48D6D100064D99 /* SetGameScoreTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameScoreTracker.swift; sourceTree = "<group>"; };
+		51AF411D2C48E2D400064D99 /* Stripe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stripe.swift; sourceTree = "<group>"; };
+		51AF411F2C48E83700064D99 /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,8 @@
 				51AF410C2C4817CB00064D99 /* SetGameModel.swift */,
 				51AF411B2C48D6D100064D99 /* SetGameScoreTracker.swift */,
 				51AF410E2C481B7D00064D99 /* CardView.swift */,
+				51AF411D2C48E2D400064D99 /* Stripe.swift */,
+				51AF411F2C48E83700064D99 /* Diamond.swift */,
 				51AF41102C48283400064D99 /* SetCardGameInterpreter.swift */,
 				51AF41152C48376200064D99 /* ProductCollection4.swift */,
 				51AF41172C4837F800064D99 /* SetFeatures.swift */,
@@ -178,6 +184,7 @@
 				51AF40FA2C4811CB00064D99 /* SetCardGameApp.swift in Sources */,
 				51AF41112C48283400064D99 /* SetCardGameInterpreter.swift in Sources */,
 				51AF410B2C4815A400064D99 /* Cardify.swift in Sources */,
+				51AF41202C48E83700064D99 /* Diamond.swift in Sources */,
 				51AF411C2C48D6D100064D99 /* SetGameScoreTracker.swift in Sources */,
 				51AF41162C48376200064D99 /* ProductCollection4.swift in Sources */,
 				51AF41182C4837F800064D99 /* SetFeatures.swift in Sources */,
@@ -185,6 +192,7 @@
 				51AF410F2C481B7D00064D99 /* CardView.swift in Sources */,
 				51AF410D2C4817CB00064D99 /* SetGameModel.swift in Sources */,
 				51AF411A2C48424100064D99 /* GrowingButton.swift in Sources */,
+				51AF411E2C48E2D400064D99 /* Stripe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

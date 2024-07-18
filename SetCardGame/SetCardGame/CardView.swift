@@ -21,23 +21,64 @@ struct CardView: View {
         case .blue: .blue
         case .green: .green
         }
-        return Circle()
-            .opacity(0.4)
-            .overlay {
-                Text("\(card.somee)")
-                    .font(.system(size: 25))
-                    .minimumScaleFactor(0.02)
-                    .multilineTextAlignment(.center)
-                    .aspectRatio(1, contentMode: .fit)
-                    .padding(4)
+        GeometryReader { geometry in
+            let width = geometry.size.width
+            let padding = Constants.cardPaddingRatio * width
+            return VStack(
+                spacing: Constants.spacing
+            ) {
+                let shape = cardShape
+                ForEach(0 ..< card.numberOfShapes, id: \.self) { _ in
+                    applyShading(to: shape)
+                }
             }
-            .padding(Constants.inset)
+            .padding(padding)
             .cardify(isSelected: card.isSelected)
             .foregroundColor(color)
+        }
+    }
+    
+    private var cardShape: some Shape {
+        switch card.shape {
+        case .oval:
+            AnyShape(Capsule())
+        case .squiggle:
+            AnyShape(Rectangle())
+                
+        case .diamond:
+            AnyShape(Diamond())
+        }
+    }
+    
+    @ViewBuilder func applyShading(to shape: some Shape) -> some View {
+        switch card.shading {
+        case .solid:
+            shape
+                .aspectRatio(Constants.Shape.aspectRario, contentMode: .fit)
+                .clipShape(shape)
+        case .open:
+            shape
+                .stroke(lineWidth: Constants.Shape.lineWidth)
+                .aspectRatio(Constants.Shape.aspectRario, contentMode: .fit)
+        case .striped:
+            shape
+                .stroke(lineWidth: Constants.Shape.lineWidth)
+                .aspectRatio(Constants.Shape.aspectRario, contentMode: .fit)
+                .background(
+                    Stripe(lineWidth: Constants.Shape.lineWidth)
+                        .clipShape(shape)
+                )
+        }
     }
 
     struct Constants {
         static let inset: CGFloat = 4
+        static let spacing: CGFloat = 4
+        static let cardPaddingRatio: CGFloat = 0.2
+        struct Shape {
+            static let aspectRario: CGFloat = 2 / 1
+            static let lineWidth: CGFloat = 2 / 1
+        }
     }
 }
 
