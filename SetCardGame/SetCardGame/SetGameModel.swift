@@ -56,9 +56,14 @@ struct SetGameModel {
                             // a set found
                             deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
-                                cards[index].isOpened = false
+                                cards[index].isASet = true
                             }
-                            openCards(3)
+                            // draw 3 more cards if there are less than 12 cards
+                            if (cards.filter{
+                                $0.isOpened && !$0.isASet
+                            }.count < 12) {
+                                openCards(3)
+                            }
                         } else {
                             // the three selected cards don't conform to be a Set
                             deselectCards(potentialSetIndices)
@@ -95,7 +100,10 @@ struct SetGameModel {
 
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
         var isSelected: Bool = false
+        // this property is used to display the card in the UI
         var isOpened: Bool = false
+        // if a card already belong to a set
+        var isASet: Bool = false
         let numberOfShapes: Int
         let shape: SetShape
         let shading: SetShading

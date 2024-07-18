@@ -17,12 +17,16 @@ class SetCardGameInterpreter: ObservableObject {
     
     var cards: [Card] {
         model.cards.filter { card in
-            card.isOpened
+            card.isOpened && !card.isASet
         }
     }
     
     var canOpenMoreCards: Bool {
-        model.cards.filter { !$0.isOpened }.count > 0 && cards.count < 21
+        cardsInDeck > 0 && cards.count < 21
+    }
+    
+    var cardsInDeck: Int {
+        model.cards.filter { !$0.isOpened }.count
     }
     
     // MARK: - Intents

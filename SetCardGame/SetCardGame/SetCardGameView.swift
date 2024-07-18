@@ -37,7 +37,7 @@ struct SetCardGameView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.black)
                 Spacer()
-                Text("Cards in deck: 60")
+                Text("Cards in deck: \(viewModel.cardsInDeck)")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.indigo)
