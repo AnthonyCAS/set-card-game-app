@@ -10,12 +10,16 @@ struct SetGameModel {
 
     private(set) var cards: [Card]
     private var lastOpenCardIndex: Int
+    
+    weak var delegate: SetGameDelegate?
 
     private var indexOfSelectedCards: [Int] {
         cards.indices.filter { cards[$0].isSelected }
     }
 
-    init() {
+    init(
+        with gameTracker: SetGameDelegate? = nil
+    ) {
         lastOpenCardIndex = 0
         cards = []
         cards = product(1 ... 3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
@@ -28,6 +32,8 @@ struct SetGameModel {
             )
         }.shuffled()
         openCards()
+        delegate = gameTracker
+        delegate?.gameDidStart()
     }
 
     mutating func openCards(_ numberOfCards: Int = initialNumberOfCards) {
@@ -58,6 +64,7 @@ struct SetGameModel {
                             for index in potentialSetIndices {
                                 cards[index].isASet = true
                             }
+                            delegate?.track(points: 1)
                             // draw 3 more cards if there are less than 12 cards
                             if (cards.filter{
                                 $0.isOpened && !$0.isASet

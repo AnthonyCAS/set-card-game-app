@@ -48,7 +48,7 @@ struct SetCardGameView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.indigo)
-                Text("12")
+                Text("\(viewModel.score)")
                     .font(.system(size: scoreFontSize))
                     .fontWeight(.semibold)
                     .foregroundColor(.indigo)

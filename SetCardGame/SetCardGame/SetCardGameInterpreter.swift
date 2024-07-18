@@ -13,7 +13,8 @@ class SetCardGameInterpreter: ObservableObject {
     
     private static let nextNumberOfCards: Int = 3
     
-    @Published private var model = SetGameModel()
+    private var gameScoreTracker: SetGameScoreTracker
+    @Published private var model: SetGameModel
     
     var cards: [Card] {
         model.cards.filter { card in
@@ -27,6 +28,15 @@ class SetCardGameInterpreter: ObservableObject {
     
     var cardsInDeck: Int {
         model.cards.filter { !$0.isOpened }.count
+    }
+    
+    var score: Int {
+           gameScoreTracker.getScore()
+       }
+    
+    init() {
+        gameScoreTracker = SetGameScoreTracker()
+        model = SetGameModel(with: gameScoreTracker)
     }
     
     // MARK: - Intents
