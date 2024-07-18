@@ -124,12 +124,6 @@ struct SetGameModel {
             \(id): \(numberOfShapes) \(shape) \(color) \(shading) \(isSelected ? "Chosen" : "")
             """
         }
-
-        var somee: String {
-            """
-            \(numberOfShapes) \(shape.rawValue) \(shading)
-            """
-        }
     }
 }
 

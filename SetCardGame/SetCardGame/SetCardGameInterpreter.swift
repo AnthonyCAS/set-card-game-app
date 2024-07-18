@@ -56,6 +56,6 @@ class SetCardGameInterpreter: ObservableObject {
     }
     
     func startNewGame() {
-        model = SetGameModel()
+        model = SetGameModel(with: gameScoreTracker)
     }
 }

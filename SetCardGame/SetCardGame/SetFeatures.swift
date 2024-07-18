@@ -5,10 +5,10 @@
 //  Created by zhira on 7/17/24.
 //
 
-enum SetShape: String, CaseIterable {
-    case oval = "●"
-    case diamond = "♦︎"
-    case squiggle = "✖︎"
+enum SetShape: CaseIterable {
+    case oval
+    case diamond
+    case squiggle
 }
 
 enum SetShading: CaseIterable {
