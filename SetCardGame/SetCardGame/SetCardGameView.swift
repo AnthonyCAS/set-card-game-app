@@ -15,13 +15,13 @@ struct SetCardGameView: View {
     private let headerHeight: CGFloat = 88
     private let newGameIconSize: CGFloat = 24.0
 
-    var body: some View {        
+    var body: some View {
         VStack(spacing: 0) {
             header
             cardsGrid
                 .foregroundColor(.blue)
                 .animation(.default, value: viewModel.cards)
-            footer            
+            footer
         }
         .padding()
     }
@@ -60,20 +60,33 @@ struct SetCardGameView: View {
 
     private var footer: some View {
         HStack {
-            Button(
-                action: {
-                    viewModel.openNextCards()
-                }) {
-                    Text("Deal 3 More Cards")
-                        .fontWeight(.medium)
+            VStack {
+                let text = if let text = viewModel.systemMessage?.rawValue {
+                    text
+                } else {
+                    " "
                 }
-                .buttonStyle(
-                    GrowingButton(
-                        isEnabled: viewModel.canOpenMoreCards,
-                        color: .indigo
+                Text(text)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundColor(
+                        viewModel.systemMessage == SetGameResponse.success ? .green : .red
                     )
-                )
-                .disabled(!viewModel.canOpenMoreCards)
+                Button(
+                    action: {
+                        viewModel.openNextCards()
+                    }) {
+                        Text("Deal 3 More Cards")
+                            .fontWeight(.medium)
+                    }
+                    .buttonStyle(
+                        GrowingButton(
+                            isEnabled: viewModel.canOpenMoreCards,
+                            color: .indigo
+                        )
+                    )
+                    .disabled(!viewModel.canOpenMoreCards)
+            }
             Spacer()
             Button(
                 action: viewModel.startNewGame
@@ -88,7 +101,6 @@ struct SetCardGameView: View {
                 .padding(newGameIconSize)
                 .foregroundStyle(.indigo)
             }
-         
         }
     }
 

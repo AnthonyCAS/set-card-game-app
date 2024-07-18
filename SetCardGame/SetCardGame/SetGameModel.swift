@@ -10,7 +10,7 @@ struct SetGameModel {
 
     private(set) var cards: [Card]
     private var lastOpenCardIndex: Int
-    
+
     weak var delegate: SetGameDelegate?
 
     private var indexOfSelectedCards: [Int] {
@@ -52,6 +52,7 @@ struct SetGameModel {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
             if !cards[chosenIndex].isSelected, cards[chosenIndex].isOpened {
                 if indexOfSelectedCards.count < 3 {
+                    delegate?.didChooseACard()
                     cards[chosenIndex].isSelected.toggle()
                     if let potentialSetIndices = indexOfSelectedCards.onlyThree {
                         // there are exactly 3 potential selected cards in the game
@@ -59,14 +60,14 @@ struct SetGameModel {
                         let card2 = cards[potentialSetIndices[1]]
                         let card3 = cards[potentialSetIndices[2]]
                         if cardsBelongToASet(card1, card2, card3) {
-                            // a set found
+                            // a set found!
                             deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
                                 cards[index].isASet = true
                             }
                             delegate?.track(points: 1)
                             // draw 3 more cards if there are less than 12 cards
-                            if (cards.filter{
+                            if (cards.filter {
                                 $0.isOpened && !$0.isASet
                             }.count < 12) {
                                 openCards(3)
@@ -74,6 +75,7 @@ struct SetGameModel {
                         } else {
                             // the three selected cards don't conform to be a Set
                             deselectCards(potentialSetIndices)
+                            delegate?.didChooseAWrongSet()
                         }
                     }
                 }
@@ -82,7 +84,7 @@ struct SetGameModel {
             }
         }
     }
-    
+
     private mutating func deselectCards(_ indices: [Int]) {
         for index in indices {
             cards[index].isSelected = false
@@ -96,13 +98,13 @@ struct SetGameModel {
         let shadingSet = Set(cards.map { $0.shading })
         return
             (numberOfShapesSet.count == 1 ||
-            numberOfShapesSet.count == 3)
+                numberOfShapesSet.count == 3)
             && (colorSet.count == 1 ||
-            colorSet.count == 3)
+                colorSet.count == 3)
             && (shapeSet.count == 1 ||
-            shapeSet.count == 3)
+                shapeSet.count == 3)
             && (shadingSet.count == 1 ||
-            shadingSet.count == 3)
+                shadingSet.count == 3)
     }
 
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {

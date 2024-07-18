@@ -74,7 +74,7 @@ struct CardView: View {
     struct Constants {
         static let inset: CGFloat = 4
         static let spacing: CGFloat = 4
-        static let cardPaddingRatio: CGFloat = 0.2
+        static let cardPaddingRatio: CGFloat = 0.18
         struct Shape {
             static let aspectRario: CGFloat = 2 / 1
             static let lineWidth: CGFloat = 2 / 1

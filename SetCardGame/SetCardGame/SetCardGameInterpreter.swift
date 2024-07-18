@@ -34,6 +34,10 @@ class SetCardGameInterpreter: ObservableObject {
            gameScoreTracker.getScore()
        }
     
+    var systemMessage: SetGameResponse? {
+           gameScoreTracker.getMssg()
+    }
+    
     init() {
         gameScoreTracker = SetGameScoreTracker()
         model = SetGameModel(with: gameScoreTracker)
