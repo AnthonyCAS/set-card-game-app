@@ -9,11 +9,15 @@ import SwiftUI
 
 struct SetCardGameView: View {
     @ObservedObject var viewModel: SetCardGameInterpreter
+    private let cardAspectRatio: CGFloat = 2 / 3
+    private let spacing: CGFloat = 4
+    private let scoreFontSize: CGFloat = 64
 
     var body: some View {
         VStack(spacing: 0) {
             cardsGrid
                 .foregroundColor(.blue)
+                .animation(.default, value: viewModel.cards)
             Button(
                 action: {
                     viewModel.openNextCards()
@@ -21,34 +25,18 @@ struct SetCardGameView: View {
                     Text("Open 3 Cards")
                         .fontWeight(.medium)
                 }
-                .buttonStyle(
-                    GrowingButton(color: .indigo)
-                )
+                .buttonStyle(GrowingButton(color: .indigo))
         }
         .padding()
     }
 
     private var cardsGrid: some View {
-        AspectLazyVGrid(viewModel.cards) { card in
-            let color: Color = switch card.color {
-            case .red: .red
-            case .blue: .blue
-            case .green: .green
-            }
-            Circle()
-                .opacity(0.4)
-                .overlay {
-                    Text("\(card.somee)")
-                        .font(.system(size: 30))
-                        .minimumScaleFactor(0.02)
-                        .multilineTextAlignment(.center)
-                        .aspectRatio(1, contentMode: .fit)
-                        .padding(4)
+        AspectLazyVGrid(viewModel.cards, aspectRatio: cardAspectRatio) { card in
+            CardView(card)
+                .padding(spacing)
+                .onTapGesture {
+                    viewModel.choose(card)
                 }
-                .padding(4)
-                .cardify(isFaceUp: true)
-                .padding(4)
-                .foregroundColor(color)
         }
     }
 }

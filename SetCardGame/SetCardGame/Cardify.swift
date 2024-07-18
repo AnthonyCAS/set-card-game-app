@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Cardify: ViewModifier {
-    let isFaceUp: Bool
+    let isSelected: Bool
     
     func body(content: Content) -> some View {
         ZStack {
@@ -17,24 +17,22 @@ struct Cardify: ViewModifier {
                 .strokeBorder(lineWidth: Constants.lineWidth)
                 .background(
                     base
-                        .fill(.white)
+                        .fill(isSelected ? .yellow : .white)
+                        .opacity(Constants.opacity)
                 )
-                .overlay(content)
-                .opacity(isFaceUp ? 1 : 0)
-            base
-                .fill()
-                .opacity(isFaceUp ? 0 : 1)
+                .overlay(content)                
         }
     }
     
     struct Constants {
-        static var cornerRadius: CGFloat = 12
-        static var lineWidth: CGFloat = 2
+        static let cornerRadius: CGFloat = 12
+        static let lineWidth: CGFloat = 2
+        static let opacity: CGFloat = 0.2
     }
 }
 
 extension View {
-    func cardify(isFaceUp: Bool) -> some View {
-        modifier(Cardify(isFaceUp: isFaceUp))
+    func cardify(isSelected: Bool) -> some View {
+        modifier(Cardify(isSelected: isSelected))
     }
 }

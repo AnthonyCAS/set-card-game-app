@@ -17,13 +17,19 @@ class SetCardGameInterpreter: ObservableObject {
     
     var cards: [Card] {
         model.cards.filter { card in
-            card.opened
+            card.isOpened
         }
     }
     
     // MARK: - Intents
     
     func openNextCards(_ numberOfCards: Int = nextNumberOfCards) {
-        model.openCards(numberOfCards)
+        if (cards.count < 21) {
+            model.openCards(numberOfCards)
+        }
+    }
+    
+    func choose(_ card: Card) {
+        model.choose(card)
     }
 }
