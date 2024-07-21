@@ -10,9 +10,11 @@ import SwiftUI
 struct CardView: View {
     typealias Card = SetGameModel.Card
     let card: Card
+    var isFaceUp: Bool = true
 
-    init(_ card: Card) {
+    init(_ card: Card, isFaceUp: Bool = true) {
         self.card = card
+        self.isFaceUp = isFaceUp
     }
 
     var body: some View {
@@ -33,7 +35,11 @@ struct CardView: View {
                 }
             }
             .padding(padding)
-            .cardify(isSelected: card.isSelected)
+            .cardify(
+                isSelected: card.isSelected,
+                isFaceUp: !card.isMatched
+            )
+            .animation(.easeInOut(duration: 2), value: card.isFaceUp)
             .foregroundColor(color)
         }
     }

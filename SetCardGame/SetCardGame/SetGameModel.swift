@@ -48,6 +48,7 @@ struct SetGameModel {
                             // a set found!
                             deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
+                                cards[index].isFaceUp = false
                                 cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)

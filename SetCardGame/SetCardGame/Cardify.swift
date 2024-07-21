@@ -21,7 +21,7 @@ struct Cardify: ViewModifier, Animatable {
         set { rotation = newValue }
     }
     
-    init(isSelected: Bool) {
+    init(isSelected: Bool, isFaceUp: Bool) {
         self.isSelected = isSelected
         rotation = isFaceUp ? 0 : 180
     }
@@ -54,7 +54,12 @@ struct Cardify: ViewModifier, Animatable {
 }
 
 extension View {
-    func cardify(isSelected: Bool) -> some View {
-        modifier(Cardify(isSelected: isSelected))
+    func cardify(isSelected: Bool, isFaceUp: Bool) -> some View {
+        modifier(
+            Cardify(
+                isSelected: isSelected,
+                isFaceUp: isFaceUp
+            )
+        )
     }
 }

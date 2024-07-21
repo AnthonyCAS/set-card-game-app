@@ -21,7 +21,7 @@ struct SetCardGameView: View {
     }
     
     private var undealtCards: [Card] {
-        viewModel.cards.filter { !isDealt($0) && !$0.isMatched }
+        viewModel.cards.filter { !isDealt($0)  }
     }
 
     var body: some View {
@@ -78,7 +78,7 @@ struct SetCardGameView: View {
     }
 
     private var cards: some View {
-        let someFIlter = viewModel.cards.filter { isDealt($0) && !$0.isMatched }
+        let someFIlter = viewModel.cards.filter { isDealt($0)  }
         return AspectLazyVGrid(someFIlter, aspectRatio: Constants.cardAspectRatio) { card in
                 CardView(card)
                     .padding(Constants.spacing)
@@ -116,10 +116,10 @@ struct SetCardGameView: View {
     private var discardPile: some View {
         ZStack {
             ForEach(viewModel.matchedCards.indices, id: \.self) { index in
-                CardView(viewModel.matchedCards[index])
+                CardView(viewModel.matchedCards[index], isFaceUp: false)
                     .stacked(at: index, in: viewModel.matchedCards.count)
                     .matchedGeometryEffect(id: viewModel.matchedCards[index].id, in: matchingNamespace)
-                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+//                    .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
         }
         .frame(width: Constants.deckWidth, height: Constants.deckHeight)
