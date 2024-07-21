@@ -12,7 +12,7 @@ struct SetCardGameView: View {
     private let cardAspectRatio: CGFloat = 2 / 3
     private let spacing: CGFloat = 4
     private let scoreFontSize: CGFloat = 64
-    private let headerHeight: CGFloat = 88
+    private let headerHeight: CGFloat = 96
     private let newGameIconSize: CGFloat = 24.0
 
     var body: some View {
@@ -36,15 +36,15 @@ struct SetCardGameView: View {
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.black)
-                Spacer()
-                Text("Cards in deck: \(viewModel.cardsInDeck)")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.indigo)
+                Button(action: viewModel.startNewGame) {
+                    Label("New Game", systemImage: "plus")
+                }
+                .buttonStyle(.bordered)
+                .tint(.indigo)
             }
             Spacer()
             VStack {
-                Text("Sets found")
+                Text("Sets Found")
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.indigo)
@@ -59,48 +59,27 @@ struct SetCardGameView: View {
     }
 
     private var footer: some View {
-        HStack {
+        HStack(alignment: .top) {
             VStack {
-                let text = if let text = viewModel.systemMessage?.rawValue {
-                    text
-                } else {
-                    " "
-                }
-                Text(text)
-                    .font(.body)
-                    .fontWeight(.medium)
-                    .foregroundColor(
-                        viewModel.systemMessage == SetGameResponse.success ? .green : .red
-                    )
-                Button(
-                    action: {
+                deck
+                    .onTapGesture {
                         viewModel.openNextCards()
-                    }) {
-                        Text("Deal 3 More Cards")
-                            .fontWeight(.medium)
                     }
-                    .buttonStyle(
-                        GrowingButton(
-                            isEnabled: viewModel.canOpenMoreCards,
-                            color: .indigo
-                        )
-                    )
                     .disabled(!viewModel.canOpenMoreCards)
+                Text("\(viewModel.cardsInDeck)")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.indigo)
             }
             Spacer()
             Button(
                 action: viewModel.startNewGame
             ) {
-                VStack {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: newGameIconSize, height: newGameIconSize)
-                    Text("New Game")
-                        .fontWeight(.medium)
-                }
-                .padding(newGameIconSize)
-                .foregroundStyle(.indigo)
+                Label("Shuffle", systemImage: "arrow.clockwise")
             }
+            .buttonStyle(GrowingButton(color: .indigo))
+            Spacer()
+            discardPile
         }
     }
 
@@ -112,6 +91,33 @@ struct SetCardGameView: View {
                     viewModel.choose(card)
                 }
         }
+    }
+
+    private var discardPile: some View {
+        ZStack {
+            ForEach(viewModel.cards.indices, id: \.self) { index in
+                CardView(viewModel.cards[index])
+                    .frame(width: 50, height: 50 / cardAspectRatio)
+                    .stacked(at: index, in: viewModel.cards.count)
+            }
+        }
+    }
+
+    private var deck: some View {
+        ZStack {
+            ForEach(viewModel.cards.indices, id: \.self) { index in
+                CardView(viewModel.cards[index])
+                    .frame(width: 50, height: 50 / cardAspectRatio)
+                    .stacked(at: index, in: viewModel.cards.count)
+            }
+        }
+    }
+}
+
+extension View {
+    func stacked(at position: Int, in total: Int) -> some View {
+        let offset = Double(total - position)
+        return self.offset(x: offset * 0.5, y: offset * 0.5)
     }
 }
 
