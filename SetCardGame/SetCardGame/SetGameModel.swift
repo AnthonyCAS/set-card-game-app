@@ -9,7 +9,6 @@ struct SetGameModel {
     private static let initialNumberOfCards: Int = 12
 
     private(set) var cards: [Card]
-    private var lastOpenCardIndex: Int
 
     weak var delegate: SetGameDelegate?
 
@@ -20,7 +19,6 @@ struct SetGameModel {
     init(
         with gameTracker: SetGameDelegate? = nil
     ) {
-        lastOpenCardIndex = 0
         cards = []
         cards = product(1 ... 3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
             Card(
@@ -31,26 +29,13 @@ struct SetGameModel {
                 id: "\($0)-\($1)-\($2)-\($3)"
             )
         }.shuffled()
-        openCards()
         delegate = gameTracker
         delegate?.gameDidStart()
     }
 
-    mutating func openCards(_ numberOfCards: Int = initialNumberOfCards) {
-        for index in lastOpenCardIndex ..< lastOpenCardIndex + numberOfCards {
-            if cards.indices.contains(index) {
-                cards[index].isOpened = true
-                lastOpenCardIndex = index + 1
-            } else {
-                // no more cards
-                break
-            }
-        }
-    }
-
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
-            if !cards[chosenIndex].isSelected, cards[chosenIndex].isOpened {
+            if !cards[chosenIndex].isSelected {
                 if indexOfSelectedCards.count < 3 {
                     delegate?.didChooseACard()
                     cards[chosenIndex].isSelected.toggle()
@@ -63,15 +48,15 @@ struct SetGameModel {
                             // a set found!
                             deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
-                                cards[index].isASet = true
+                                cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)
                             // draw 3 more cards if there are less than 12 cards
-                            if (cards.filter {
-                                $0.isOpened && !$0.isASet
-                            }.count < 12) {
-                                openCards(3)
-                            }
+//                            if (cards.filter {
+//                                $0.isDealt && !$0.isMatched
+//                            }.count < 12) {
+//                                dealCards(3)
+//                            }
                         } else {
                             // the three selected cards don't conform to be a Set
                             deselectCards(potentialSetIndices)
@@ -92,6 +77,7 @@ struct SetGameModel {
     }
 
     private func cardsBelongToASet(_ cards: Card...) -> Bool {
+        return true
         let numberOfShapesSet = Set(cards.map { $0.numberOfShapes })
         let colorSet = Set(cards.map { $0.color })
         let shapeSet = Set(cards.map { $0.shape })
@@ -106,13 +92,22 @@ struct SetGameModel {
             && (shadingSet.count == 1 ||
                 shadingSet.count == 3)
     }
+    
+    mutating func shuffle() {
+        cards.shuffle()
+    }
 
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
+        var isFaceUp: Bool = true
         var isSelected: Bool = false
-        // this property is used to display the card in the UI
-        var isOpened: Bool = false
         // if a card already belong to a set
-        var isASet: Bool = false
+        var isMatched: Bool = false {
+            didSet {
+                if isMatched {
+                    isFaceUp = false
+                }
+            }
+        }
         let numberOfShapes: Int
         let shape: SetShape
         let shading: SetShading
