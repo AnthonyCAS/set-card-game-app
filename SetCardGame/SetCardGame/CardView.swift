@@ -44,19 +44,18 @@ struct CardView: View {
             .animation(Constants.rotationAnimation, value: card.isFaceUp)
         }
     }
-    
+
     private var cardShape: some Shape {
         switch card.shape {
         case .oval:
             AnyShape(Capsule())
         case .squiggle:
             AnyShape(Rectangle())
-                
         case .diamond:
             AnyShape(Diamond())
         }
     }
-    
+
     @ViewBuilder func applyShading(to shape: some Shape) -> some View {
         switch card.shading {
         case .solid:

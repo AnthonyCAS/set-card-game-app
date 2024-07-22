@@ -20,7 +20,7 @@ struct SetGameModel {
         with gameTracker: SetGameDelegate? = nil
     ) {
         cards = []
-        cards = product(1 ... 3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
+        cards = product(1...3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
             Card(
                 numberOfShapes: $0,
                 shape: $2,
@@ -85,7 +85,6 @@ struct SetGameModel {
     }
 
     private func cardsBelongToASet(_ cards: Card...) -> Bool {
-//        return true
         let numberOfShapesSet = Set(cards.map { $0.numberOfShapes })
         let colorSet = Set(cards.map { $0.color })
         let shapeSet = Set(cards.map { $0.shape })

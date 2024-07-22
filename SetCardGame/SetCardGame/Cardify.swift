@@ -48,7 +48,7 @@ struct Cardify: ViewModifier, Animatable {
                     .trim(from: .zero, to: progress)
                     .glow(
                         fill: .palette,
-                        lineWidth: 4
+                        lineWidth: Constants.glowLineWidth
                     )
                     .onAppear {
                         withAnimation(
@@ -78,6 +78,7 @@ struct Cardify: ViewModifier, Animatable {
         static let lineWidth: CGFloat = 2
         static let opacity: CGFloat = 0.2
         static let starShapePadding: CGFloat = 4
+        static let glowLineWidth: CGFloat = 4
         static let offWhiteColor: Color = .init(hex: 0xf5f5f5)
     }
 }
