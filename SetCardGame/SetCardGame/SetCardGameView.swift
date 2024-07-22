@@ -17,6 +17,7 @@ struct SetCardGameView: View {
     @State private var matched = Set<Card.ID>()
     
     @State var animateMatching: Bool = false
+    @State var cardsZIndex: Double = 30
     
     @Namespace private var dealingNamespace
     @Namespace private var matchingNamespace
@@ -46,17 +47,21 @@ struct SetCardGameView: View {
                 cards
                     .foregroundColor(.blue)
                     .animation(.default, value: viewModel.cards)
+                    .zIndex(cardsZIndex)
                 footer
+                    .zIndex(animateMatching ? 50 : 10)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onChange(of: viewModel.score) {
                 withAnimation(.linear(duration: 1)) {
+                    cardsZIndex = 1
                     animateMatching = true
                 } completion: {
                     discard()
                 }
             }
             if animateMatching {
-                matchingContainer
+                matchingView
             }
         }
         .padding()
@@ -64,23 +69,23 @@ struct SetCardGameView: View {
     
     private func discard() {
         withAnimation(.easeInOut(duration: 1)) {
-            selectedCards.forEach { card in
+            for card in selectedCards {
                 matched.insert(card.id)
             }
             animateMatching = false
-            
         } completion: {
-            selectedCards.forEach { card in
+            for card in selectedCards {
                 dealt.remove(card.id)
             }
             viewModel.deselectCards()
-            if (dealt.count < 12) {
+            if dealt.count < Constants.Deck.initialNumberOfCards {
                 deal(Constants.Deck.nextNumberOfCards)
             }
+            cardsZIndex = 30
         }
     }
     
-    private var matchingContainer: some View {
+    private var matchingView: some View {
         GeometryReader { geometry in
             let width = (geometry.size.width / CGFloat(selectedCards.count + 1)).rounded(.down)
             HStack {
@@ -109,13 +114,14 @@ struct SetCardGameView: View {
                     .foregroundColor(.black)
                 Button(
                     action: {
-                        viewModel.startNewGame()
                         dealt.removeAll()
                         matched.removeAll()
-                        deal(Constants.Deck.initialNumberOfCards, animate: true)
+                        viewModel.startNewGame()
+                        deal(Constants.Deck.initialNumberOfCards, animate: false)
                     }
                 ) {
                     Label("New Game", systemImage: "plus")
+                        .font(.title2)
                 }
                 .buttonStyle(.bordered)
                 .tint(.indigo)
@@ -160,7 +166,7 @@ struct SetCardGameView: View {
     }
     
     private var footer: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .bottom) {
             VStack {
                 if !undealtCards.isEmpty {
                     deck
@@ -179,7 +185,7 @@ struct SetCardGameView: View {
             ) {
                 Label("Shuffle", systemImage: "arrow.clockwise")
             }
-            .buttonStyle(GrowingButton(color: .indigo))
+            .buttonStyle(GrowingButton(color: .red.opacity(0.8)))
             Spacer()
             discardPile
         }
@@ -188,25 +194,29 @@ struct SetCardGameView: View {
     private var discardPile: some View {
         let cards = viewModel.cards.filter { isMatched($0) }
         return ZStack {
-            ForEach(cards.indices, id: \.self) { index in
+            ForEach(cards.indices.reversed(), id: \.self) { index in
                 CardView(cards[index])
                     .stacked(at: index, in: cards.count)
                     .matchedGeometryEffect(id: cards[index].id, in: discardingNamespace)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
-                    .zIndex(Constants.matchingCardZIndex)
             }
         }
         .frame(width: Constants.Deck.width, height: Constants.Deck.height)
     }
     
     private var deck: some View {
-        ZStack {
-            ForEach(undealtCards.indices, id: \.self) { index in
-                let card = undealtCards[index]
-                CardView(card, isFaceUp: false)
-                    .stacked(at: index, in: undealtCards.count)
-                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+        let noMatchedCards = viewModel.cards.filter { !$0.isMatched }
+        return ZStack {
+            ForEach(noMatchedCards.indices, id: \.self) { index in
+                let card = noMatchedCards[index]
+                if !isDealt(card) {
+                    CardView(card, isFaceUp: false)
+                        .stacked(at: index, in: noMatchedCards.count)
+                        .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                        .transition(.asymmetric(insertion: .identity, removal: .identity))
+                } else {
+                    Color.clear
+                }
             }
         }
         .frame(width: Constants.Deck.width, height: Constants.Deck.height)
@@ -221,18 +231,18 @@ struct SetCardGameView: View {
     }
     
     private func choose(_ card: Card) {
-        withAnimation(.linear(duration: 2)) {
+        withAnimation {
             viewModel.choose(card)
         }
     }
-
     
     private func deal(_ numberOfCards: Int, animate: Bool = true) {
         var delay: TimeInterval = 0
         for card in undealtCards.suffix(numberOfCards).reversed() {
             if animate {
                 withAnimation(Constants.dealAnimation
-                    .delay(delay)) {
+                    .delay(delay))
+                {
                     _ = dealt.insert(card.id)
                 }
             } else {
@@ -257,12 +267,14 @@ struct SetCardGameView: View {
             static let nextNumberOfCards: Int = 3
             static let minNumberOfCards: Int = 15
         }
+
         static let dealInterval: TimeInterval = 0.15
         static let dealAnimation: Animation = .easeInOut(duration: 2)
     }
 }
 
 extension View {
+    // a stacked effect of cards
     func stacked(at position: Int, in total: Int) -> some View {
         let offset = Double(total - position)
         return self.offset(x: 0, y: offset * 0.1)

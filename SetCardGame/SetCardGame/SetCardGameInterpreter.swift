@@ -18,10 +18,6 @@ class SetCardGameInterpreter: ObservableObject {
         model.cards
     }
     
-    var matchedCards: [Card] {
-        cards.filter { $0.isMatched }
-    }
-    
     var score: Int {
         gameScoreTracker.getScore()
     }

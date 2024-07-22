@@ -45,7 +45,6 @@ struct SetGameModel {
                         let card3 = cards[potentialSetIndices[2]]
                         if cardsBelongToASet(card1, card2, card3) {
                             // a set found!
-//                            deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
 //                                cards[index].isFaceUp = false
                                 cards[index].isMatched = true
@@ -63,16 +62,16 @@ struct SetGameModel {
             }
         }
     }
-    
+
     mutating func deselectCards() {
         for index in cards.indices {
             cards[index].isSelected = false
         }
     }
-    
+
     mutating func dealCard(_ card: Card) {
-        if let some22 = cards.firstIndex(of: card) {
-            cards[some22].isFaceUp = true
+        if let index = cards.firstIndex(of: card) {
+            cards[index].isFaceUp = true
         }
     }
 
@@ -92,13 +91,12 @@ struct SetGameModel {
             && (shadingSet.count == 1 ||
                 shadingSet.count == 3)
     }
-    
+
     mutating func shuffle() {
         cards.shuffle()
     }
 
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
-        var isDealt: Bool = false
         var isFaceUp: Bool = false
         var isSelected: Bool = false
         // if a card already belong to a set
