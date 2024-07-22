@@ -1,0 +1,58 @@
+//
+//  AspectLazyVGrid.swift
+//  SetCardGame
+//
+//  Created by zhira on 7/16/24.
+//
+
+import SwiftUI
+
+struct AspectLazyVGrid<Item: Identifiable, ItemView: View>: View {
+    var items: [Item]
+    var aspectRatio: CGFloat = 1
+    var content: (Item) -> ItemView
+
+    init(_ items: [Item], aspectRatio: CGFloat = 1, @ViewBuilder content: @escaping (Item) -> ItemView) {
+        self.items = items
+        self.aspectRatio = aspectRatio
+        self.content = content
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            let gridItemSize = computeGridItemWidthThatFits(
+                count: items.count,
+                size: geometry.size,
+                aspetRatio: aspectRatio
+            )
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: gridItemSize), spacing: 0)],
+                spacing: 0
+            ) {
+                ForEach(items) { item in
+                    content(item)
+                        .aspectRatio(aspectRatio, contentMode: .fit)
+                }
+            }
+        }
+    }
+
+    private func computeGridItemWidthThatFits(
+        count: Int,
+        size: CGSize,
+        aspetRatio: CGFloat
+    ) -> CGFloat {
+        let count = CGFloat(count)
+        var columnCount = 1.0
+        repeat {
+            let width = size.width / columnCount
+            let height = width / aspetRatio
+            let rowCount = (count / columnCount).rounded(.up)
+            if rowCount * height < size.height {
+                return width.rounded(.down)
+            }
+            columnCount += 1
+        } while columnCount < count
+        return min(size.width / count, size.height * aspetRatio).rounded(.down)
+    }
+}
