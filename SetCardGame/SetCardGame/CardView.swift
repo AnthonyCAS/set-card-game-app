@@ -37,9 +37,10 @@ struct CardView: View {
             .padding(padding)
             .cardify(
                 isSelected: card.isSelected,
-                isFaceUp: !card.isMatched
+//                isFaceUp: !card.isMatched
+                isFaceUp: isFaceUp
             )
-            .animation(.easeInOut(duration: 2), value: card.isFaceUp)
+//            .animation(.easeInOut(duration: 2), value: card.isFaceUp)
             .foregroundColor(color)
         }
     }

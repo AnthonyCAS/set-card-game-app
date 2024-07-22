@@ -48,4 +48,8 @@ class SetCardGameInterpreter: ObservableObject {
     func startNewGame() {
         model = SetGameModel(with: gameScoreTracker)
     }
+    
+    func deselectCards() {
+        model.deselectCards()
+    }
 }

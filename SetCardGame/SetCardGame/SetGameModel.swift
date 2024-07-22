@@ -46,9 +46,9 @@ struct SetGameModel {
                         let card3 = cards[potentialSetIndices[2]]
                         if cardsBelongToASet(card1, card2, card3) {
                             // a set found!
-                            deselectCards(potentialSetIndices)
+//                            deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
-                                cards[index].isFaceUp = false
+//                                cards[index].isFaceUp = false
                                 cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)
@@ -60,7 +60,7 @@ struct SetGameModel {
 //                            }
                         } else {
                             // the three selected cards don't conform to be a Set
-                            deselectCards(potentialSetIndices)
+                            deselectCards()
                             delegate?.didChooseAWrongSet()
                         }
                     }
@@ -70,9 +70,9 @@ struct SetGameModel {
             }
         }
     }
-
-    private mutating func deselectCards(_ indices: [Int]) {
-        for index in indices {
+    
+    mutating func deselectCards() {
+        for index in cards.indices {
             cards[index].isSelected = false
         }
     }
@@ -105,7 +105,7 @@ struct SetGameModel {
         var isMatched: Bool = false {
             didSet {
                 if isMatched {
-                    isFaceUp = false
+//                    isFaceUp = false
                 }
             }
         }

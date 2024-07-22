@@ -11,28 +11,87 @@ struct SetCardGameView: View {
     typealias Card = SetGameModel.Card
     @ObservedObject var viewModel: SetCardGameInterpreter
     
+    // this set stores the card ids that will be rendered in the table
     @State private var dealt = Set<Card.ID>()
+    // this set stores the card ids that will be rendered in the discard pile
+    @State private var matched = Set<Card.ID>()
+    
+    @State var animateMatch: Bool = false
     
     @Namespace private var dealingNamespace
     @Namespace private var matchingNamespace
+    @Namespace private var discardingNamespace
     
     private func isDealt(_ card: Card) -> Bool {
         dealt.contains(card.id)
     }
     
+    private func isMatched(_ card: Card) -> Bool {
+        matched.contains(card.id)
+    }
+    
+    // card in the deck card view
     private var undealtCards: [Card] {
-        viewModel.cards.filter { !isDealt($0)  }
+        viewModel.cards.filter { !isDealt($0) && !$0.isMatched }
+    }
+    
+    private var selectedCards: [Card] {
+        viewModel.cards.filter { $0.isSelected }
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            cards
-                .foregroundColor(.blue)
-                .animation(.default, value: viewModel.cards)
-            footer
+        ZStack {
+            VStack(spacing: 0) {
+                header
+                cards
+                    .foregroundColor(.blue)
+                    .animation(.default, value: viewModel.cards)
+                footer
+            }
+            .onChange(of: viewModel.score) {
+                withAnimation(.linear(duration: 1)) {
+                    animateMatch = true
+                } completion: {
+                    withAnimation(.easeInOut(duration: 1)) {
+                        selectedCards.forEach { card in
+                            matched.insert(card.id)
+                        }
+                        animateMatch = false
+                        
+                    } completion: {
+                        selectedCards.forEach { card in
+                            dealt.remove(card.id)
+                        }
+                        viewModel.deselectCards()
+                        if (dealt.count < 12) {
+                            deal(Constants.nextNumberOfCards)
+                        }
+                    }
+                }
+            }
+            if animateMatch {
+                matchingContainer
+            }
+            
         }
         .padding()
+    }
+    
+    private var matchingContainer: some View {
+        GeometryReader { geometry in
+            let width = (geometry.size.width / CGFloat(selectedCards.count + 1)).rounded(.down)
+            HStack {
+                ForEach(selectedCards.reversed()) { card in
+                    CardView(card)
+                        .frame(width: width, height: width / Constants.cardAspectRatio)
+                        .matchedGeometryEffect(id: card.id, in: matchingNamespace)
+                        .matchedGeometryEffect(id: card.id, in: discardingNamespace)
+                        .transition(.asymmetric(insertion: .identity, removal: .identity))
+                        .zIndex(Constants.matchingCardZIndex)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
 
     private var header: some View {
@@ -74,20 +133,25 @@ struct SetCardGameView: View {
                 .font(.system(size: Constants.scoreFontSize))
                 .fontWeight(.semibold)
                 .foregroundColor(.indigo)
+                .animation(nil)
         }
     }
 
     private var cards: some View {
-        let someFIlter = viewModel.cards.filter { isDealt($0)  }
-        return AspectLazyVGrid(someFIlter, aspectRatio: Constants.cardAspectRatio) { card in
+        let someFIlter = viewModel.cards.filter { isDealt($0) }
+        return AspectLazyVGrid(someFIlter.reversed(), aspectRatio: Constants.cardAspectRatio) { card in
+            if !card.isMatched {
                 CardView(card)
                     .padding(Constants.spacing)
                     .onTapGesture {
                         choose(card)
                     }
+                    .transition(.asymmetric(insertion: .identity, removal: .slide))
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .matchedGeometryEffect(id: card.id, in: matchingNamespace)
-                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+            } else {
+                Color.clear
+            }
         }
     }
     
@@ -114,12 +178,15 @@ struct SetCardGameView: View {
     }
     
     private var discardPile: some View {
-        ZStack {
-            ForEach(viewModel.matchedCards.indices, id: \.self) { index in
-                CardView(viewModel.matchedCards[index], isFaceUp: false)
-                    .stacked(at: index, in: viewModel.matchedCards.count)
-                    .matchedGeometryEffect(id: viewModel.matchedCards[index].id, in: matchingNamespace)
-//                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+        let someFIlter = viewModel.cards.filter { isMatched($0) }
+        return ZStack {
+            ForEach(someFIlter.indices, id: \.self) { index in
+                CardView(someFIlter[index], isFaceUp: false)
+                    .stacked(at: index, in: someFIlter.count)
+                    .matchedGeometryEffect(id: someFIlter[index].id, in: discardingNamespace)
+//                    .matchedGeometryEffect(id: viewModel.matchedCards[index].id, in: matchingNamespace)
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    .zIndex(Constants.matchingCardZIndex)
             }
         }
         .frame(width: Constants.deckWidth, height: Constants.deckHeight)
@@ -130,7 +197,7 @@ struct SetCardGameView: View {
             ForEach(undealtCards.indices, id: \.self) { index in
                 let card = undealtCards[index]
                 CardView(card)
-//                    .stacked(at: index, in: viewModel.cards.count)
+                    .stacked(at: index, in: undealtCards.count)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
@@ -176,6 +243,7 @@ struct SetCardGameView: View {
         static let headerHeight: CGFloat = 96
         static let deckWidth: CGFloat = 50
         static let deckHeight: CGFloat = deckWidth / cardAspectRatio
+        static let matchingCardZIndex: Double = 100
         struct animation {
             static let dealInterval: TimeInterval = 0.15
             static let dealAnimation: Animation = .easeInOut(duration: 2)

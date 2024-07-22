@@ -33,14 +33,19 @@ struct Cardify: ViewModifier, Animatable {
                 .strokeBorder(lineWidth: Constants.lineWidth)
                 .background(
                     base
-                        .fill(isSelected ? .yellow : .white)
+                        .fill(isSelected ? .yellow : Constants.offWhiteColor)
                 )
                 .overlay(
                     content
                 )
                 .opacity(isFaceUp ? 1 : 0)
             base
-                .fill(.black)
+                .fill(.indigo.gradient)
+                .overlay {
+                    Star()
+                        .foregroundColor(.white)
+                        .padding(Constants.starShapePadding)
+                }
                 .opacity(isFaceUp ? 0 : 1)
         }
         .rotation3DEffect(.degrees(rotation), axis: (x: 0, y: 1, z: 0))
@@ -50,6 +55,8 @@ struct Cardify: ViewModifier, Animatable {
         static let cornerRadius: CGFloat = 12
         static let lineWidth: CGFloat = 2
         static let opacity: CGFloat = 0.2
+        static let starShapePadding: CGFloat = 4
+        static let offWhiteColor: Color = .init(hex: 0xf5f5f5)
     }
 }
 
@@ -60,6 +67,18 @@ extension View {
                 isSelected: isSelected,
                 isFaceUp: isFaceUp
             )
+        )
+    }
+}
+
+extension Color {
+    init(hex: Int, alpha: Double = 1) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255,
+            opacity: alpha
         )
     }
 }
