@@ -34,6 +34,7 @@ struct SetGameModel {
     }
 
     mutating func choose(_ card: Card) {
+        clearErrors()
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
             if !cards[chosenIndex].isSelected {
                 if indexOfSelectedCards.count < 3 {
@@ -46,7 +47,6 @@ struct SetGameModel {
                         if cardsBelongToASet(card1, card2, card3) {
                             // a set found!
                             for index in potentialSetIndices {
-//                                cards[index].isFaceUp = false
                                 cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)
@@ -54,6 +54,9 @@ struct SetGameModel {
                         } else {
                             // the three selected cards don't conform to be a Set
                             deselectCards()
+                            for index in potentialSetIndices {
+                                cards[index].showError = true
+                            }
                         }
                     }
                 }
@@ -68,6 +71,12 @@ struct SetGameModel {
             cards[index].isSelected = false
         }
     }
+    
+    private mutating func clearErrors() {
+        for index in cards.indices {
+            cards[index].showError = false
+        }
+    }
 
     mutating func dealCard(_ card: Card) {
         if let index = cards.firstIndex(of: card) {
@@ -76,7 +85,7 @@ struct SetGameModel {
     }
 
     private func cardsBelongToASet(_ cards: Card...) -> Bool {
-        return true
+//        return true
         let numberOfShapesSet = Set(cards.map { $0.numberOfShapes })
         let colorSet = Set(cards.map { $0.color })
         let shapeSet = Set(cards.map { $0.shape })
@@ -99,6 +108,7 @@ struct SetGameModel {
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
         var isFaceUp: Bool = false
         var isSelected: Bool = false
+        var showError: Bool = false
         // if a card already belong to a set
         var isMatched: Bool = false
         let numberOfShapes: Int

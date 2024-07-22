@@ -37,8 +37,9 @@ struct CardView: View {
             .padding(padding)
             .cardify(
                 isSelected: card.isSelected,
-                isFaceUp: card.isFaceUp
-            )            
+                isFaceUp: card.isFaceUp,
+                showError: card.showError
+            )
             .foregroundColor(color)
             .animation(Constants.rotationAnimation, value: card.isFaceUp)
         }
