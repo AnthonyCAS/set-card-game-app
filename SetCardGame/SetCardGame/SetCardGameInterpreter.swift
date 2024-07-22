@@ -23,11 +23,7 @@ class SetCardGameInterpreter: ObservableObject {
     }
     
     var score: Int {
-           gameScoreTracker.getScore()
-       }
-    
-    var systemMessage: SetGameResponse? {
-        gameScoreTracker.getMssg()
+        gameScoreTracker.getScore()
     }
     
     init() {
@@ -51,5 +47,9 @@ class SetCardGameInterpreter: ObservableObject {
     
     func deselectCards() {
         model.deselectCards()
+    }
+    
+    func dealCard(_ card: Card) {
+        model.dealCard(card)
     }
 }

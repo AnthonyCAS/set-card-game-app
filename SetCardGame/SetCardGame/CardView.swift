@@ -37,11 +37,10 @@ struct CardView: View {
             .padding(padding)
             .cardify(
                 isSelected: card.isSelected,
-//                isFaceUp: !card.isMatched
-                isFaceUp: isFaceUp
-            )
-//            .animation(.easeInOut(duration: 2), value: card.isFaceUp)
+                isFaceUp: card.isFaceUp
+            )            
             .foregroundColor(color)
+            .animation(Constants.rotationAnimation, value: card.isFaceUp)
         }
     }
     
@@ -82,6 +81,7 @@ struct CardView: View {
         static let inset: CGFloat = 4
         static let spacing: CGFloat = 4
         static let cardPaddingRatio: CGFloat = 0.18
+        static let rotationAnimation: Animation = .easeInOut(duration: 1)
         struct Shape {
             static let aspectRario: CGFloat = 2 / 1
             static let lineWidth: CGFloat = 2 / 1

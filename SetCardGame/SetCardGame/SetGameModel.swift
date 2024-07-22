@@ -37,7 +37,6 @@ struct SetGameModel {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
             if !cards[chosenIndex].isSelected {
                 if indexOfSelectedCards.count < 3 {
-                    delegate?.didChooseACard()
                     cards[chosenIndex].isSelected.toggle()
                     if let potentialSetIndices = indexOfSelectedCards.onlyThree {
                         // there are exactly 3 potential selected cards in the game
@@ -52,16 +51,10 @@ struct SetGameModel {
                                 cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)
-                            // draw 3 more cards if there are less than 12 cards
-//                            if (cards.filter {
-//                                $0.isDealt && !$0.isMatched
-//                            }.count < 12) {
-//                                dealCards(3)
-//                            }
+                            // draw 3 more cards if there are less than 12 cards (UI)
                         } else {
                             // the three selected cards don't conform to be a Set
                             deselectCards()
-                            delegate?.didChooseAWrongSet()
                         }
                     }
                 }
@@ -74,6 +67,12 @@ struct SetGameModel {
     mutating func deselectCards() {
         for index in cards.indices {
             cards[index].isSelected = false
+        }
+    }
+    
+    mutating func dealCard(_ card: Card) {
+        if let some22 = cards.firstIndex(of: card) {
+            cards[some22].isFaceUp = true
         }
     }
 
@@ -99,16 +98,11 @@ struct SetGameModel {
     }
 
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
-        var isFaceUp: Bool = true
+        var isDealt: Bool = false
+        var isFaceUp: Bool = false
         var isSelected: Bool = false
         // if a card already belong to a set
-        var isMatched: Bool = false {
-            didSet {
-                if isMatched {
-//                    isFaceUp = false
-                }
-            }
-        }
+        var isMatched: Bool = false
         let numberOfShapes: Int
         let shape: SetShape
         let shading: SetShading
