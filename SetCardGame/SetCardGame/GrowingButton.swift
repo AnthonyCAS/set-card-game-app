@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GrowingButton: ButtonStyle {
-    let isEnabled: Bool
+    let isEnabled: Bool = true
     let color: Color
     let disabledColor: Color = .gray
 

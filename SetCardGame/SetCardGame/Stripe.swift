@@ -29,14 +29,16 @@ struct Stripe: Shape {
         // let fullStripeWidth = lineWidth + lineSpacing
         let fullStripeWidth = width / 7
         var path = Path()
-        for x in stride(from: fullStripeWidth, through: width, by: fullStripeWidth) {
-            let stripeRect = CGRect(
-                x: x,
-                y: 0,
-                width: lineWidth,
-                height: height
-            )
-            path.addRect(stripeRect)
+        if fullStripeWidth != 0 {            
+            for x in stride(from: fullStripeWidth, through: width, by: fullStripeWidth) {
+                let stripeRect = CGRect(
+                    x: x,
+                    y: 0,
+                    width: lineWidth,
+                    height: height
+                )
+                path.addRect(stripeRect)
+            }
         }
         return path
     }

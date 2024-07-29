@@ -10,32 +10,16 @@ import SwiftUI
 // This is the ViewModel Entity (I used this name because a conflict on the module name)
 class SetCardGameInterpreter: ObservableObject {
     typealias Card = SetGameModel.Card
-    
-    private static let nextNumberOfCards: Int = 3
-    
+        
     private var gameScoreTracker: SetGameScoreTracker
     @Published private var model: SetGameModel
     
     var cards: [Card] {
-        model.cards.filter { card in
-            card.isOpened && !card.isASet
-        }
-    }
-    
-    var canOpenMoreCards: Bool {
-        cardsInDeck > 0 && cards.count < 21
-    }
-    
-    var cardsInDeck: Int {
-        model.cards.filter { !$0.isOpened }.count
+        model.cards
     }
     
     var score: Int {
-           gameScoreTracker.getScore()
-       }
-    
-    var systemMessage: SetGameResponse? {
-           gameScoreTracker.getMssg()
+        gameScoreTracker.getScore()
     }
     
     init() {
@@ -45,17 +29,23 @@ class SetCardGameInterpreter: ObservableObject {
     
     // MARK: - Intents
     
-    func openNextCards(_ numberOfCards: Int = nextNumberOfCards) {
-        if (cards.count < 21) {
-            model.openCards(numberOfCards)
-        }
-    }
-    
     func choose(_ card: Card) {
         model.choose(card)
     }
     
+    func shuffle() {
+        model.shuffle()
+    }
+    
     func startNewGame() {
         model = SetGameModel(with: gameScoreTracker)
+    }
+    
+    func deselectCards() {
+        model.deselectCards()
+    }
+    
+    func dealCard(_ card: Card) {
+        model.dealCard(card)
     }
 }

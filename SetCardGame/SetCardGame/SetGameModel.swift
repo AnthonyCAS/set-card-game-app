@@ -9,7 +9,6 @@ struct SetGameModel {
     private static let initialNumberOfCards: Int = 12
 
     private(set) var cards: [Card]
-    private var lastOpenCardIndex: Int
 
     weak var delegate: SetGameDelegate?
 
@@ -20,9 +19,8 @@ struct SetGameModel {
     init(
         with gameTracker: SetGameDelegate? = nil
     ) {
-        lastOpenCardIndex = 0
         cards = []
-        cards = product(1 ... 3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
+        cards = product(1...3, SetColor.allCases, SetShape.allCases, SetShading.allCases).map {
             Card(
                 numberOfShapes: $0,
                 shape: $2,
@@ -31,28 +29,15 @@ struct SetGameModel {
                 id: "\($0)-\($1)-\($2)-\($3)"
             )
         }.shuffled()
-        openCards()
         delegate = gameTracker
         delegate?.gameDidStart()
     }
 
-    mutating func openCards(_ numberOfCards: Int = initialNumberOfCards) {
-        for index in lastOpenCardIndex ..< lastOpenCardIndex + numberOfCards {
-            if cards.indices.contains(index) {
-                cards[index].isOpened = true
-                lastOpenCardIndex = index + 1
-            } else {
-                // no more cards
-                break
-            }
-        }
-    }
-
     mutating func choose(_ card: Card) {
+        clearErrors()
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
-            if !cards[chosenIndex].isSelected, cards[chosenIndex].isOpened {
+            if !cards[chosenIndex].isSelected {
                 if indexOfSelectedCards.count < 3 {
-                    delegate?.didChooseACard()
                     cards[chosenIndex].isSelected.toggle()
                     if let potentialSetIndices = indexOfSelectedCards.onlyThree {
                         // there are exactly 3 potential selected cards in the game
@@ -61,21 +46,17 @@ struct SetGameModel {
                         let card3 = cards[potentialSetIndices[2]]
                         if cardsBelongToASet(card1, card2, card3) {
                             // a set found!
-                            deselectCards(potentialSetIndices)
                             for index in potentialSetIndices {
-                                cards[index].isASet = true
+                                cards[index].isMatched = true
                             }
                             delegate?.track(points: 1)
-                            // draw 3 more cards if there are less than 12 cards
-                            if (cards.filter {
-                                $0.isOpened && !$0.isASet
-                            }.count < 12) {
-                                openCards(3)
-                            }
+                            // draw 3 more cards if there are less than 12 cards (UI)
                         } else {
                             // the three selected cards don't conform to be a Set
-                            deselectCards(potentialSetIndices)
-                            delegate?.didChooseAWrongSet()
+                            deselectCards()
+                            for index in potentialSetIndices {
+                                cards[index].showError = true
+                            }
                         }
                     }
                 }
@@ -85,9 +66,21 @@ struct SetGameModel {
         }
     }
 
-    private mutating func deselectCards(_ indices: [Int]) {
-        for index in indices {
+    mutating func deselectCards() {
+        for index in cards.indices {
             cards[index].isSelected = false
+        }
+    }
+    
+    private mutating func clearErrors() {
+        for index in cards.indices {
+            cards[index].showError = false
+        }
+    }
+
+    mutating func dealCard(_ card: Card) {
+        if let index = cards.firstIndex(of: card) {
+            cards[index].isFaceUp = true
         }
     }
 
@@ -107,12 +100,16 @@ struct SetGameModel {
                 shadingSet.count == 3)
     }
 
+    mutating func shuffle() {
+        cards.shuffle()
+    }
+
     struct Card: Identifiable, CustomDebugStringConvertible, Hashable {
+        var isFaceUp: Bool = false
         var isSelected: Bool = false
-        // this property is used to display the card in the UI
-        var isOpened: Bool = false
+        var showError: Bool = false
         // if a card already belong to a set
-        var isASet: Bool = false
+        var isMatched: Bool = false
         let numberOfShapes: Int
         let shape: SetShape
         let shading: SetShading

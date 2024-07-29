@@ -10,9 +10,11 @@ import SwiftUI
 struct CardView: View {
     typealias Card = SetGameModel.Card
     let card: Card
+    var isFaceUp: Bool = true
 
-    init(_ card: Card) {
+    init(_ card: Card, isFaceUp: Bool = true) {
         self.card = card
+        self.isFaceUp = isFaceUp
     }
 
     var body: some View {
@@ -33,23 +35,27 @@ struct CardView: View {
                 }
             }
             .padding(padding)
-            .cardify(isSelected: card.isSelected)
+            .cardify(
+                isSelected: card.isSelected,
+                isFaceUp: card.isFaceUp,
+                showError: card.showError
+            )
             .foregroundColor(color)
+            .animation(Constants.rotationAnimation, value: card.isFaceUp)
         }
     }
-    
+
     private var cardShape: some Shape {
         switch card.shape {
         case .oval:
             AnyShape(Capsule())
         case .squiggle:
             AnyShape(Rectangle())
-                
         case .diamond:
             AnyShape(Diamond())
         }
     }
-    
+
     @ViewBuilder func applyShading(to shape: some Shape) -> some View {
         switch card.shading {
         case .solid:
@@ -75,6 +81,7 @@ struct CardView: View {
         static let inset: CGFloat = 4
         static let spacing: CGFloat = 4
         static let cardPaddingRatio: CGFloat = 0.18
+        static let rotationAnimation: Animation = .easeInOut(duration: 1)
         struct Shape {
             static let aspectRario: CGFloat = 2 / 1
             static let lineWidth: CGFloat = 2 / 1
