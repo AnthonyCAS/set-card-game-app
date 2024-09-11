@@ -22,8 +22,10 @@ class SetCardGameInterpreter: ObservableObject {
         gameScoreTracker.getScore()
     }
     
-    init() {
-        gameScoreTracker = SetGameScoreTracker()
+    init(
+        scoreTracker: SetGameScoreTracker = SetGameScoreTracker()
+    ) {
+        gameScoreTracker = scoreTracker
         model = SetGameModel(with: gameScoreTracker)
     }
     
